@@ -1,6 +1,7 @@
 package validations
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -60,6 +61,7 @@ func AuthRegisterFormValidate(c *gin.Context) (map[string]string, bool) {
 
 	// Validate status
 	status, _ := strconv.ParseUint(c.PostForm("status"), 10, 8)
+	fmt.Println(uint8(status))
 	if err := ValidateStatus(uint8(status)); err != nil {
 		messages["status"] = err.Error()
 	}

@@ -16,7 +16,7 @@ func main() {
 	// GIN initialize
 	router := gin.Default()
 
-	router.LoadHTMLGlob("templates/**/*")
+	// router.LoadHTMLGlob("templates/**/*")
 
 	// Setup routes
 	routes.SetupRoutes(router)

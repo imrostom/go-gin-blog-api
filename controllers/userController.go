@@ -13,7 +13,7 @@ func GetUserHandler(c *gin.Context) {
 	// Fetch users from the service
 	users, err := services.GetUsers(c)
 	if err != nil {
-		helpers.ErrorResponse(c, gin.H{"User": gin.H{}}, err.Error())
+		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
 		return
 	}
 
@@ -35,13 +35,13 @@ func CreateUserHandler(c *gin.Context) {
 	}
 
 	// Create User via service
-	User, err := services.CreateUser(c)
+	user, err := services.CreateUser(c)
 	if err != nil {
-		helpers.ErrorResponse(c, gin.H{"errors": gin.H{"name": err.Error()}}, "Error")
+		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
 		return
 	}
 
-	helpers.SuccessResponse(c, gin.H{"User": User}, "Success")
+	helpers.SuccessResponse(c, gin.H{"user": user}, "Success")
 }
 
 func ShowUserHandler(c *gin.Context) {
@@ -49,7 +49,7 @@ func ShowUserHandler(c *gin.Context) {
 
 	user, err := services.GetUserByID(uint(id))
 	if err != nil {
-		helpers.ErrorResponse(c, gin.H{"user": gin.H{}}, err.Error())
+		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
 		return
 	}
 
@@ -61,7 +61,7 @@ func UpdateUserHandler(c *gin.Context) {
 
 	_, err := services.GetUserByID(uint(id))
 	if err != nil {
-		helpers.ErrorResponse(c, gin.H{"user": gin.H{}}, err.Error())
+		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
 		return
 	}
 
@@ -75,7 +75,7 @@ func UpdateUserHandler(c *gin.Context) {
 	// Update User via service
 	user, err := services.UpdateUser(c)
 	if err != nil {
-		helpers.ErrorResponse(c, gin.H{"errors": gin.H{"name": err.Error()}}, "Error")
+		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
 		return
 	}
 
@@ -87,7 +87,7 @@ func DeleteUserHandler(c *gin.Context) {
 
 	// Delete User via service
 	if err := services.DeleteUser(uint(id)); err != nil {
-		helpers.ErrorResponse(c, gin.H{"user": gin.H{}}, err.Error())
+		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
 		return
 	}
 

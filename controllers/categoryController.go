@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +14,7 @@ func GetCategoryHandler(c *gin.Context) {
 	// Fetch categories from the service
 	categories, err := services.GetCategories(c)
 	if err != nil {
-		helpers.ErrorResponse(c, gin.H{"category": gin.H{}}, err.Error())
+		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
 		return
 	}
 
@@ -27,7 +28,8 @@ func GetCategoryHandler(c *gin.Context) {
 
 func CreateCategoryHandler(c *gin.Context) {
 	// Validate form data
-	messages, isValid := validations.CategoryFormValidate(c, true)
+	messages, isValid := validations.CategoryFormValidate(c, false)
+	fmt.Println("ddd")
 	if !isValid {
 		helpers.ErrorResponse(c, gin.H{"errors": messages}, "Error")
 		return
@@ -36,7 +38,7 @@ func CreateCategoryHandler(c *gin.Context) {
 	// Create category via service
 	category, err := services.CreateCategory(c)
 	if err != nil {
-		helpers.ErrorResponse(c, gin.H{"errors": gin.H{"name": err.Error()}}, "Error")
+		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
 		return
 	}
 
@@ -48,7 +50,7 @@ func ShowCategoryHandler(c *gin.Context) {
 
 	category, err := services.GetCategoryByID(uint(id))
 	if err != nil {
-		helpers.ErrorResponse(c, gin.H{"category": gin.H{}}, err.Error())
+		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
 		return
 	}
 
@@ -66,7 +68,7 @@ func UpdateCategoryHandler(c *gin.Context) {
 	// Update category via service
 	category, err := services.UpdateCategory(c)
 	if err != nil {
-		helpers.ErrorResponse(c, gin.H{"errors": gin.H{"name": err.Error()}}, "Error")
+		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
 		return
 	}
 
@@ -78,7 +80,7 @@ func DeleteCategoryHandler(c *gin.Context) {
 
 	// Delete category via service
 	if err := services.DeleteCategory(uint(id)); err != nil {
-		helpers.ErrorResponse(c, gin.H{"category": gin.H{}}, err.Error())
+		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
 		return
 	}
 

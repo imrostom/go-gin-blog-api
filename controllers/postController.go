@@ -13,7 +13,7 @@ func GetPostHandler(c *gin.Context) {
 	// Fetch posts from the service
 	posts, err := services.GetPosts(c)
 	if err != nil {
-		helpers.ErrorResponse(c, gin.H{"post": gin.H{}}, err.Error())
+		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
 		return
 	}
 
@@ -49,7 +49,7 @@ func ShowPostHandler(c *gin.Context) {
 
 	post, err := services.GetPostByID(uint(id))
 	if err != nil {
-		helpers.ErrorResponse(c, gin.H{"post": gin.H{}}, err.Error())
+		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
 		return
 	}
 
@@ -61,7 +61,7 @@ func UpdatePostHandler(c *gin.Context) {
 
 	_, err := services.GetPostByID(uint(id))
 	if err != nil {
-		helpers.ErrorResponse(c, gin.H{"post": gin.H{}}, err.Error())
+		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
 		return
 	}
 
@@ -75,7 +75,7 @@ func UpdatePostHandler(c *gin.Context) {
 	// Update post via service
 	post, err := services.UpdatePost(c)
 	if err != nil {
-		helpers.ErrorResponse(c, gin.H{"errors": gin.H{"name": err.Error()}}, "Error")
+		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
 		return
 	}
 

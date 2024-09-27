@@ -33,11 +33,11 @@ func CategoryFormValidate(c *gin.Context, isUpdate bool) (map[string]string, boo
 			id, _ := strconv.Atoi(c.Param("id"))
 
 			if err := config.DB.Where("name = ? AND id != ?", c.PostForm("name"), id).First(&existingCategory).Error; err == nil {
-				messages["name"] = "user name must be unique"
+				messages["name"] = "the category name must be unique"
 			}
 		} else {
 			if err := config.DB.Where("name = ?", c.PostForm("name")).First(&existingCategory).Error; err == nil {
-				messages["name"] = "user name must be unique"
+				messages["name"] = "the category name must be unique"
 			}
 		}
 

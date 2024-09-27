@@ -1,7 +1,9 @@
 package helpers
 
 import (
+	"bytes"
 	"errors"
+	"html/template"
 	"mime/multipart"
 	"os"
 	"path/filepath"
@@ -14,6 +16,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/imrostom/go-blog-api/models"
 	"golang.org/x/crypto/bcrypt"
+	"gopkg.in/gomail.v2"
 	"gorm.io/gorm"
 )
 
@@ -136,4 +139,32 @@ func UploadImage(c *gin.Context, file *multipart.FileHeader, uploadDir string) (
 	}
 
 	return filePath, nil
+}
+
+func SendEmail(to, subject, body string) error {
+	mailer := gomail.NewMessage()
+	mailer.SetHeader("From", "rostomali4444@gmail.com")
+	mailer.SetHeader("To", to)
+	mailer.SetHeader("Subject", subject)
+	// m.SetBody("text/html", "Hello <b>Bob</b> and <i>Cora</i>!")
+
+	mailer.SetBody("text/html", body)
+
+	dialer := gomail.NewDialer("sandbox.smtp.mailtrap.io", 587, "6ac9aa45bb99db", "d4020c36dcb127")
+
+	// Send the email
+	err := dialer.DialAndSend(mailer)
+	return err
+}
+
+func RenderTemplate(templateFileName string, data interface{}) (string, error) {
+	tmpl, err := template.ParseFiles(templateFileName)
+	if err != nil {
+		return "", err
+	}
+	var buf bytes.Buffer
+	if err = tmpl.Execute(&buf, data); err != nil {
+		return "", err
+	}
+	return buf.String(), nil
 }
