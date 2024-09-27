@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"log"
+	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -38,6 +40,28 @@ func CreateUserHandler(c *gin.Context) {
 	user, err := services.CreateUser(c)
 	if err != nil {
 		helpers.ErrorResponse(c, gin.H{"errors": gin.H{}}, err.Error())
+		return
+	}
+
+	// Load data to pass into the template
+	data := UserData{
+		AppName:          "EasyBlog", // Replace with actual data
+		VerificationLink: "https://wwww.google.com",
+		UserName:         user.Name,
+	}
+
+	// Parse the HTML email template
+	body, err := helpers.RenderTemplate("templates/mails/user-registration.html", data)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to load email template"})
+		return
+	}
+
+	// Send the email
+	err = helpers.SendEmail(user.Email, "Welcome to the service", body)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to send email"})
+		log.Println("Error sending email:", err)
 		return
 	}
 
